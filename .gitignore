@@ -1,0 +1,18 @@
+
+# Python environment
+.venv/
+__pycache__/
+*.pyc
+
+# Jupyter temporary files
+.ipynb_checkpoints/
+
+# NHANES datasets
+data/raw/
+data/processed/
+
+# Environment configuration
+.env
+
+# Temporary files
+*.tmp
