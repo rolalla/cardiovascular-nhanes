@@ -116,14 +116,37 @@ cardiovascular-nhanes/
    .\.venv\Scripts\Activate.ps1
    python -m pip install -r requirements.txt
    ```
-3. In VS Code, select `.venv` as the notebook kernel. Run `notebooks/01_data_preparation.ipynb`, then `02_exploratory_analysis.ipynb`, then `03_statistical_analysis.ipynb`, in that order. Run them from the `notebooks/` folder or project root as supported by the notebook path setup.
+3. Register the project's virtual environment as a dedicated Jupyter kernel:
+
+   ```powershell
+   .\.venv\Scripts\python.exe -m ipykernel install --user --name cardiovascular-nhanes --display-name "Python (Cardiovascular NHANES)"
+   ```
+
+   In VS Code, select **Python (Cardiovascular NHANES)** as the notebook kernel.
+
+   Run the notebooks in the following order:
+   - `01_data_preparation.ipynb`
+   - `02_exploratory_analysis.ipynb`
+   - `03_statistical_analysis.ipynb`
+
+   The first notebook generates `data/processed/cardiovascular_data.csv`, which is required by the subsequent analyses.
 4. NHANES `.XPT` input files can be downloaded automatically by the preparation notebook. If the CDC endpoint is unavailable, manually download the six named source files and place them in `data/raw/`.
-5. Install the R `survey` package in a writable R library, then run the following **from the project root**:
+5. Install R and the `survey` package:
+
+   ```r
+   install.packages("survey")
+   ```
+
+   If R cannot find the package because it is installed in a custom library, configure `R_LIBS_USER` to point to that directory.
+
+   Run the statistical validation scripts from the project root:
+
    ```powershell
    Rscript scripts/04_validate_survey_models.R
    Rscript scripts/05_bmi_category_analysis.R
    ```
-   On some Windows systems, R may need `R_LIBS_USER` configured to point to a personal package library.
+
+   These scripts reproduce the survey-weighted estimates, confidence intervals, regression results and BMI category summaries.
 6. Open `dashboard/cardiovascular_insights.pbix`. If Power BI cannot find the locally generated CSVs, use **Transform Data → Data source settings** to update their file paths and refresh the report.
 
 The key files exported by the R scripts into `data/processed/` include `r_validated_overall.csv`, `r_validated_groups.csv`, `r_validated_interaction_model.csv` and `r_validated_bmi_groups.csv`. They are intentionally excluded from Git because they can be regenerated.

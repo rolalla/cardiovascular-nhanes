@@ -16,3 +16,4 @@ data/processed/
 
 # Temporary files
 *.tmp
+reports/validation/
